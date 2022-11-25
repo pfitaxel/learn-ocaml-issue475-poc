@@ -4,9 +4,6 @@ on:
     workflows: ["Generate static binaries"]
     types: ["completed"]
 
-env:
-  title: "build artifact"
-
 jobs:
   # Make artifacts links more visible for the upstream project
   pin-artifacts:
@@ -44,12 +41,12 @@ jobs:
           < artifacts.json jq -r ".[] | \
             .name + \"§\" + \
             ( .id | tostring | \"https://github.com/${{ github.repository }}/suites/${check_suite_id}/artifacts/\" + . ) + \"§\" + \
-            ( \"Link to \" + .name + \".zip [\" + ( .created_at | sub(\"T.*\"; \" → \") ) + ( .expires_at | sub(\"T.*\"; \"] (you must be logged)\" ) ) )" \
+            ( \"Link to \" + .name + \".zip [\" + ( .created_at | sub(\"T.*\"; \"→\") ) + ( .expires_at | sub(\"T.*\"; \"] (you must be logged)\" ) ) )" \
           | while IFS="§" read name url descr; do
               curl \
               -X POST \
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${{ github.token }}" \
               "https://api.github.com/repos/${{ github.repository }}/statuses/${head_sha}" \
-              -d "$( printf '{"state":"%s","target_url":"%s","description":"%s","context":"%s"}' "${{ github.event.workflow_run.conclusion }}" "$url" "$descr" "$name: ${{ env.title }}" )"
+              -d "$( printf '{"state":"%s","target_url":"%s","description":"%s","context":"%s"}' "${{ github.event.workflow_run.conclusion }}" "$url" "$descr" "$name (artifact)" )"
           done
