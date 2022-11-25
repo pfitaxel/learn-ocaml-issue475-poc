@@ -48,7 +48,7 @@ jobs:
     needs:
       - learn-ocaml-www-zip
     steps:
-      - name: Get links
+      - name: Add artifacts links to commit status
         run: |
           suite_id=$(curl \
           -H "Accept: application/vnd.github+json" \
