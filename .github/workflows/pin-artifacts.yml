@@ -51,5 +51,5 @@ jobs:
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${{ github.token }}" \
               "https://api.github.com/repos/${{ github.repository }}/statuses/${head_sha}" \
-              -d "$(printf '{"state":"%s","target_url":"%s","description":"%s","context":"%s"}' "${{ github.event.workflow_run.conclusion }}" "$url" "$descr" "$name: ${{ env.title }}" ")"
+              -d "$( printf '{"state":"%s","target_url":"%s","description":"%s","context":"%s"}' "${{ github.event.workflow_run.conclusion }}" "$url" "$descr" "$name: ${{ env.title }}" )"
           done
